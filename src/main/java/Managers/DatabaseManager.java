@@ -4,13 +4,10 @@ import Misc.PlayerScore;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Properties;
 
 public class DatabaseManager implements AutoCloseable {
 
-    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/highscores?useSSL=false&serverTimezone=UTC&characterEncoding=utf8";
-    private static final String JDBC_USER = "snake";
-    private static final String JDBC_PASS = "snake123";
+    private static final String JDBC_URL = "jdbc:sqlite:highscores.db";
 
     private final int maxScores;
     private final Connection connection;
@@ -20,17 +17,12 @@ public class DatabaseManager implements AutoCloseable {
     public DatabaseManager(int maxScores) throws SQLException {
         this.maxScores = maxScores;
 
-        Properties props = new Properties();
-        props.put("user", JDBC_USER);
-        props.put("password", JDBC_PASS);
-        props.put("serverTimezone", "UTC");
-
-        this.connection = DriverManager.getConnection(JDBC_URL, props);
+        this.connection = DriverManager.getConnection(JDBC_URL);
 
         try (Statement st = connection.createStatement()) {
             st.execute(
                     "CREATE TABLE IF NOT EXISTS HIGHSCORES (" +
-                            "  TIMESTAMP TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP," +
+                            "  TIMESTAMP DATETIME DEFAULT CURRENT_TIMESTAMP," +
                             "  NAME      VARCHAR(255) NOT NULL," +
                             "  SCORE     INT NOT NULL" +
                             ")"
