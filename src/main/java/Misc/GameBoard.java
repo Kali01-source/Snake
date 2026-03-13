@@ -92,12 +92,6 @@ public class GameBoard {
         return false;
     }
 
-    private boolean isFree(Position p) {
-        return inBounds(p) && !isRockAt(p) && !isSnakeAt(p)
-                && (Food.getInstance().getPosition() == null
-                || !Food.getInstance().getPosition().equals(p));
-    }
-
     private boolean isFreeConsidering(Position p, Set<Position> extraRocks) {
         if (!inBounds(p)) return false;
         if (isSnakeAt(p)) return false;
